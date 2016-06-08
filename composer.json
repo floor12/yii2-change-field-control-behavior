@@ -24,7 +24,7 @@
   },
   "autoload": {
     "psr-4": {
-      "floor12\yii2ChangeFieldControlBehavior": "src"
+      "floor12\\yii2ChangeFieldControlBehavior\\": "src"
     }
   }
 }
