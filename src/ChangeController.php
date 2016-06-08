@@ -3,6 +3,7 @@
 namespace floor12\yii2ChangeFieldControlBehavior;
 
 use Yii;
+use common\models\Change;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -10,9 +11,9 @@ use yii\data\ActiveDataProvider;
 
 
 /**
- * EventController implements the CRUD actions for Event model.
+ * ChangeController implements the CRUD actions for Change model.
  */
-class EventController extends Controller
+class ChangeController extends Controller
 {
     /**
      * @inheritdoc
@@ -29,15 +30,40 @@ class EventController extends Controller
         ];
     }
 
+
+    public function actionApprove($id)
+    {
+        $model = Change::findOne($id);
+        if (!$model)
+            throw new NotFoundHttpException;
+        if ($model->approved || $model->canceled)
+            throw new NotFoundHttpException;
+        $model->approve();
+        $this->redirect(\Yii::$app->request->referrer);
+
+    }
+
+    public function actionCancel($id)
+    {
+        $model = Change::findOne($id);
+        if (!$model)
+            throw new NotFoundHttpException;
+        if ($model->approved || $model->canceled)
+            throw new NotFoundHttpException;
+        $model->cancel();
+        $this->redirect(\Yii::$app->request->referrer);
+
+    }
+
     /**
-     * Lists all Event models.
+     * Lists all Change models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $query = Event::find();
+        $query = Change::find();
 
-        $params = Yii::$app->request->get('Event');
+        $params = Yii::$app->request->get('Change');
 
         if ($params['filter'])
             $query
@@ -48,6 +74,7 @@ class EventController extends Controller
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort' => ['defaultOrder' => ['created' => SORT_DESC]],
             'pagination' => [
                 'pageSize' => 10,
             ],
@@ -59,7 +86,7 @@ class EventController extends Controller
     }
 
     /**
-     * Displays a single Event model.
+     * Displays a single Change model.
      * @param integer $id
      * @return mixed
      */
@@ -71,13 +98,13 @@ class EventController extends Controller
     }
 
     /**
-     * Creates a new Event model.
+     * Creates a new Change model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Event();
+        $model = new Change();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             if ($model->backlink)
@@ -92,7 +119,7 @@ class EventController extends Controller
     }
 
     /**
-     * Updates an existing Event model.
+     * Updates an existing Change model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -114,7 +141,7 @@ class EventController extends Controller
     }
 
     /**
-     * Deletes an existing Event model.
+     * Deletes an existing Change model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -127,15 +154,15 @@ class EventController extends Controller
     }
 
     /**
-     * Finds the Event model based on its primary key value.
+     * Finds the Change model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Event the loaded model
+     * @return Change the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Event::findOne($id)) !== null) {
+        if (($model = Change::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
