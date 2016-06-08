@@ -1,0 +1,30 @@
+{
+  "name": "floor12/yii2-fprotector",
+  "description": "Simple Yii2 ext to protect form ",
+  "type": "yii2-extension",
+  "minimum-stability": "stable",
+  "keywords": [
+    "floor12",
+    "yii",
+    "yii2",
+    "yii 2",
+    "forms"
+  ],
+  "license": "BSD-3-Clause",
+  "authors": [
+    {
+      "name": "floor12",
+      "email": "primelifecoder@gmail.com",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "yiisoft/yii2": "~2.0.0",
+    "yiisoft/yii2-jui": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "floor12\yii2ChangeFieldControlBehavior": "src"
+    }
+  }
+}
