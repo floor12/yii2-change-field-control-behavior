@@ -11,6 +11,7 @@ namespace floor12\yii2ChangeFieldControlBehavior;
 
 use yii\base\Behavior;
 use yii\db\ActiveRecord;
+use yii\helpers\Html;
 
 class ChangeFiledControlBehavior extends Behavior
 {
@@ -36,6 +37,14 @@ class ChangeFiledControlBehavior extends Behavior
             }
         }
     }
+
+    public function changeBlock($property)
+    {
+        $change = Change::find()->where(['approved' => 0, 'canceled' => 0, 'class' => $this->owner->className(), 'object_id' => $this->owner->id, 'property' => $property])->one();
+        if ($change)
+            return Html::tag('div', \Yii::t('app', '<span class="glyphicon glyphicon-exclamation-sign"></span> Изменения этого поля еще не одобрены администратором.'), ['class' => 'help-block', 'style' => 'font-size: 90%; color: #F19A2C;']);
+    }
+
 
     public function events()
     {

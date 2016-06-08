@@ -60,6 +60,11 @@ class Change extends \yii\db\ActiveRecord
     public function cancel()
     {
         if (!$this->canceled) {
+            $classname = "{$this->class}";
+            $model = $classname::findOne($this->object_id);
+            $model->isNewRecord = false;
+            $model->{$this->property} = $this->value_old;
+            $model->save(false);
             $this->canceled = time();
             $this->save(false);
         }
@@ -67,12 +72,11 @@ class Change extends \yii\db\ActiveRecord
 
     public function getClass_name()
     {
-        $classNames = [
-            'common\models\Organization' => 'Профиль компании',
-            'common\models\User' => 'Профиль пользователя',
-        ];
-
-        return $classNames[$this->class];
+        $class = new $this->class;
+        if (isset($class->human_name))
+            return $class->human_name;
+        else
+            return $this->class;
     }
 
     public function getProperty_label()
@@ -80,6 +84,7 @@ class Change extends \yii\db\ActiveRecord
         $object = new $this->class;
         return $object->attributeLabels()[$this->property];
     }
+
 
     /**
      * @inheritdoc
