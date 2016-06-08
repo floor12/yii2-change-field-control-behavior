@@ -1,5 +1,5 @@
 {
-  "name": "floor12/yii2-fprotector",
+  "name": "floor12/yii2-change-field-control-behavior",
   "description": "Simple Yii2 ext to protect form ",
   "type": "yii2-extension",
   "minimum-stability": "stable",
