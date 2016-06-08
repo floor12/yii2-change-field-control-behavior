@@ -1,6 +1,6 @@
 {
   "name": "floor12/yii2-change-field-control-behavior",
-  "description": "Simple Yii2 ext to protect form ",
+  "description": "Control changes of model propertys",
   "type": "yii2-extension",
   "minimum-stability": "stable",
   "keywords": [
