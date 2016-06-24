@@ -43,7 +43,7 @@ class Change extends \yii\db\ActiveRecord
     {
         return [
             [['class', 'property', 'object_id', 'value_new', 'value_old'], 'required'],
-            [['object_id', 'approved', 'canceled'], 'integer'],
+            [['object_id', 'approved', 'canceled', 'pre'], 'integer'],
             [['value_new', 'value_old', 'ip'], 'string'],
             [['class', 'property'], 'string', 'max' => 30],
         ];
@@ -52,6 +52,15 @@ class Change extends \yii\db\ActiveRecord
     public function approve()
     {
         if (!$this->approved) {
+
+            if ($this->pre) {
+                $classname = "{$this->class}";
+                $model = $classname::findOne($this->object_id);
+                $model->isNewRecord = false;
+                $model->{$this->property} = $this->value_new;
+                $model->log = false;
+                $model->save(false);
+            }
             $this->approved = time();
             $this->save(false);
         }
@@ -60,11 +69,14 @@ class Change extends \yii\db\ActiveRecord
     public function cancel()
     {
         if (!$this->canceled) {
-            $classname = "{$this->class}";
-            $model = $classname::findOne($this->object_id);
-            $model->isNewRecord = false;
-            $model->{$this->property} = $this->value_old;
-            $model->save(false);
+            if (!$this->pre) {
+                $classname = "{$this->class}";
+                $model = $classname::findOne($this->object_id);
+                $model->isNewRecord = false;
+                $model->{$this->property} = $this->value_old;
+                $model->log = false;
+                $model->save(false);
+            }
             $this->canceled = time();
             $this->save(false);
         }
